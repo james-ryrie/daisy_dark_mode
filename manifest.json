@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Daisy Dark Mode",
+  "version": "1.0",
+  "description": "Applies custom CSS to imperial daisy website.",
+  "content_scripts": [
+    {
+      "matches": ["*://daisy.imperial.ac.uk/*"],
+      "css": ["dark.css"],
+      "run_at": "document_start"
+    }
+  ]
+}

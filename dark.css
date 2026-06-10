@@ -1,0 +1,174 @@
+/* ============================================================
+   dark.css — content stylesheet for dark mode override
+   Injected via your manifest's content_scripts.css
+   ============================================================ */
+
+/* ---- Palette: tweak these to taste ---- */
+:root {
+  --dm-bg:          #1a1b1e;  /* main page background      */
+  --dm-bg-elevated: #25262b;  /* cards, headers, panels    */
+  --dm-bg-input:    #2c2e33;  /* inputs, textareas         */
+  --dm-text:        #e4e4e7;  /* primary text              */
+  --dm-text-muted:  #a1a1aa;  /* secondary / muted text    */
+  --dm-border:      #3a3b3f;  /* borders & dividers        */
+  --dm-link:        #589fe0;  /* links (slightly dimmed)   */
+  --dm-link-hover:  #7fb8ea;  /* link hover                */
+  --dm-accent:      #4259c9;  /* buttons / accents (dimmed)*/
+  --dm-code-bg:     #161618;  /* code blocks               */
+}
+
+/* ---- Base page ---- */
+html, body {
+  background-color: var(--dm-bg) !important;
+  color: var(--dm-text) !important;
+}
+
+/* Catch-all for common containers. Broad but intentionally
+   limited to layout elements so it doesn't nuke everything. */
+div, section, article, aside, main, header, footer, nav,
+ul, ol, li, table, tr, td, th, form, fieldset, details, summary {
+  background-color: transparent !important;
+  color: inherit !important;
+  border-color: var(--dm-border) !important;
+}
+
+/* Elements that usually have their own background */
+header, footer, nav, aside,
+[class*="card"], [class*="panel"], [class*="modal"],
+[class*="header"], [class*="sidebar"], [class*="menu"],
+[class*="dropdown"], [class*="popover"], [class*="tooltip"] {
+  background-color: var(--dm-bg-elevated) !important;
+}
+
+/* ---- Text ---- */
+h1, h2, h3, h4, h5, h6, p, span, label, li, td, th, dt, dd,
+blockquote, figcaption, small, strong, em, b, i {
+  color: var(--dm-text) !important;
+}
+
+.muted, .secondary, [class*="muted"], [class*="subtle"], time {
+  color: var(--dm-text-muted) !important;
+}
+
+/* Inline/text elements sometimes carry a stray light background
+   (callouts, highlighted notes). Flatten them so text stays
+   readable — this catches the white "Feedback Mechanism" strip. */
+p, span, mark, blockquote, label, li,
+strong, em, b, i, small, abbr, q, cite, dfn {
+  background-color: transparent !important;
+}
+/* Keep genuine <mark> highlights visible with a dark-friendly tint */
+mark {
+  background-color: rgba(88, 159, 224, 0.20) !important;
+  color: var(--dm-text) !important;
+}
+
+/* ---- Links ---- */
+a, a * {
+  color: var(--dm-link) !important;
+}
+a:hover, a:hover * {
+  color: var(--dm-link-hover) !important;
+}
+
+/* ---- Form controls ---- */
+/* Text inputs blend into the page background so they don't
+   show up as a lighter box (e.g. the message field) */
+input[type="text"], input[type="search"], input[type="email"],
+input[type="password"], input[type="url"], input[type="number"],
+input:not([type]), textarea {
+  background-color: var(--dm-bg) !important;
+  color: var(--dm-text) !important;
+  border-color: var(--dm-border) !important;
+}
+/* Dropdowns keep a slightly elevated fill for contrast */
+select, option {
+  background-color: var(--dm-bg-input) !important;
+  color: var(--dm-text) !important;
+  border-color: var(--dm-border) !important;
+}
+input::placeholder, textarea::placeholder {
+  color: var(--dm-text-muted) !important;
+}
+
+button,
+input[type="button"], input[type="submit"], input[type="reset"],
+[role="button"], [class*="btn"] {
+  background-color: var(--dm-bg-elevated) !important;
+  color: var(--dm-text) !important;
+  border-color: var(--dm-border) !important;
+}
+button:hover, [role="button"]:hover, [class*="btn"]:hover {
+  filter: brightness(1.2);
+}
+
+/* Primary / accent buttons.
+   The fuzzy [class*="primary"]/[class*="cta"] selector was removed:
+   it false-matched non-button elements (like the model label) and
+   painted them accent-blue. Add the site's REAL button class here
+   if you want accent-colored buttons, e.g.:
+     .submit-btn { background-color: var(--dm-accent) !important; color:#fff !important; } */
+
+/* ---- Borders, dividers, shadows ---- */
+hr { border-color: var(--dm-border) !important; }
+* { box-shadow: none !important; } /* remove harsh light-mode shadows */
+
+/* ---- Code ---- */
+pre, code, kbd, samp {
+  background-color: var(--dm-code-bg) !important;
+  color: #e6db74 !important;
+  border-color: var(--dm-border) !important;
+}
+
+/* ---- Media ---- */
+/* By default we DON'T invert images/videos so photos look right.
+   If the site uses dark icons/logos that vanish on dark bg,
+   uncomment the rule below to lighten just those. */
+/*
+img[src*="icon"], img[src*="logo"], svg {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+*/
+
+/* Optional: dim bright images slightly so they're easier on the eyes */
+/*
+img, video, picture {
+  filter: brightness(0.85) contrast(1.05);
+}
+*/
+
+/* ---- Scrollbars (WebKit) ---- */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--dm-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--dm-border);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--dm-text-muted); }
+
+/* Override "selected"/"active" highlight states that may keep a
+   bright background (e.g. the highlighted model row) */
+[class*="selected"], [class*="active"], [class*="highlight"],
+[aria-selected="true"] {
+  background-color: var(--dm-bg-elevated) !important;
+  color: var(--dm-text) !important;
+}
+
+/* ---- Tab "tick"/caret indicator (Material-UI selected tab) ----
+   MUI draws the curved corners flanking the selected tab as SVG
+   background-images on the tab's ::before and ::after. We target the
+   stable MUI classes (NOT the hashed .css-be1yug class, which can
+   change whenever the site is rebuilt) and remove both corners. */
+.MuiTab-root.Mui-selected::before,
+.MuiTab-root.Mui-selected::after {
+  background-image: none !important;
+}
+
+/* ---- Site-specific overrides ----
+   Add rules here for elements the catch-alls above miss.
+   Use the browser inspector to find stubborn class names, e.g.:
+
+   .site-specific-banner { background-color: var(--dm-bg-elevated) !important; }
+   .weird-white-box      { background-color: var(--dm-bg) !important; }
+*/
+
