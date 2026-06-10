@@ -2,7 +2,14 @@
   "manifest_version": 2,
   "name": "Daisy Dark Mode",
   "version": "1.0",
-  "description": "Applies custom CSS to imperial daisy website.",
+  "description": "Applies custom CSS to Imperial Daisy website.",
+  "browser_specific_settings": {
+    "gecko": {
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
   "content_scripts": [
     {
       "matches": ["*://daisy.imperial.ac.uk/*"],
@@ -11,3 +18,4 @@
     }
   ]
 }
+
